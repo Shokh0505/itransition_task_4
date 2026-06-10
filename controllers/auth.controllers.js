@@ -33,8 +33,9 @@ const register = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-    const {email, password} = req.body;
-    
+    let {email, password} = req.body;
+    email = email.trim() 
+    password = password.trim();
     try {
         const user = await db.oneOrNone(
             `SELECT id, first_name, last_name, email, password FROM users WHERE email = $1`,
@@ -56,6 +57,10 @@ const login = async (req, res, next) => {
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
+        
+        await db.none(`
+            UPDATE users SET last_login = NOW() WHERE email = $1
+        `, [email])
 
         delete user.password;
 

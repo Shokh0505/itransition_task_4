@@ -1,5 +1,19 @@
 const db = require('../db');
 
+const getUsers = async (req, res, next) => {
+    try {
+        const users = await db.any(
+            `SELECT first_name, last_name, title, email, status, last_login 
+             FROM users
+             ORDER BY last_login DESC`
+        );
+
+        res.status(200).json({message: "Successfully retrieved users", users: users});
+    } catch (error) {
+        next(error)
+    }
+}
+
 const blockUsersWithEmail = async (req, res, next) => {
     const { emails } = req.body;
 
@@ -49,4 +63,4 @@ function checkEmails(emails) {
     return !emails || !Array.isArray(emails) || emails.length === 0;
 }
 
-module.exports = { blockUsersWithEmail, unblockUsersWithEmail };
+module.exports = { blockUsersWithEmail, unblockUsersWithEmail, getUsers };

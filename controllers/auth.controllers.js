@@ -1,4 +1,3 @@
-require('dotenv').config(); 
 const bcrypt = require('bcrypt');
 const db = require('../db');
 const jwt = require('jsonwebtoken');

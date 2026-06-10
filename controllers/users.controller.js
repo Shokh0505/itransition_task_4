@@ -3,13 +3,14 @@ const db = require('../db');
 const blockUsersWithEmail = async (req, res, next) => {
     const { emails } = req.body;
 
-    if (!emails || !Array.isArray(emails) || emails.length === 0) {
+    if (checkEmails(emails)) {
         return res.status(400).json({message: "Invalid or no emails are sent"});
     }
 
     try {
         const dbResult = await db.result(`
-            UPDATE users SET status = 'blocked' WHERE email = ANY($1)
+            UPDATE users SET previous_status = status, status = 'blocked'::user_status 
+            WHERE email = ANY($1) and status != 'blocked'
         `, [emails]);
 
         return res.status(200).json({
@@ -21,4 +22,31 @@ const blockUsersWithEmail = async (req, res, next) => {
     }
 }
 
-module.exports = { blockUsersWithEmail };
+const unblockUsersWithEmail = async (req, res, next) => {
+    const { emails } = req.body
+
+    if (checkEmails(emails)) {
+        return res.status(400).json({message: "Invalid or no emails are sent"});
+    }
+
+    try {
+        const dbResult = await db.result(
+            `UPDATE users 
+             SET status = COALESCE(previous_status, 'unverified')::user_status, previous_status = NULL 
+             WHERE email = ANY($1) AND status = 'blocked'`, [emails]
+        );
+
+        return res.status(200).json({
+            message: "Successfully unblocked",
+            changedAccountsNumber: dbResult.rowCount
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+function checkEmails(emails) {
+    return !emails || !Array.isArray(emails) || emails.length === 0;
+}
+
+module.exports = { blockUsersWithEmail, unblockUsersWithEmail };

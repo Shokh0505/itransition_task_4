@@ -1,3 +1,4 @@
+require('dotenv').config()
 const app = require('./app');
 const { errorHandler } = require('./middleware/error');
 const PORT = process.env.PORT || 3000;

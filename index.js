@@ -6,9 +6,11 @@ const PORT = process.env.PORT || 3000;
 
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/users');
+const deleteUsersRouter = require('./routes/userDelete');
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', checkAuthentication, userRouter);
+app.use('/api/users', checkAuthentication, deleteUsersRouter);
 app.use(errorHandler);
 
 app.listen(PORT, () => {

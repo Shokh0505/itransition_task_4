@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../db');
 
 const checkAuthentication = async (req, res, next) => {
-    const jwtTokenHeader = req.get("Authorization");
+    const jwtTokenHeader = req.cookies.token("Authorization");
     if (!jwtTokenHeader || !jwtTokenHeader.includes("Bearer")) {
         return res.status(401).json({message: "Authorization is not present. Please, log in."});
     } 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
+import { Toaster } from "sonner";
 import Image from "next/image";
 
 const geistSans = Geist({
@@ -29,10 +30,11 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
         >
             <body className="h-screen flex">
+                <Toaster />
                 <div className="flex-1">
                     {children}
                 </div>
-                <div className="flex-1 relative h-full">
+                <div className="flex-1 relative h-full hidden md:block">
                     <Image
                         src="/auth_right.jpg"
                         alt="Login page image"

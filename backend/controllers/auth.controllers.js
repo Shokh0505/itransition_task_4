@@ -35,12 +35,13 @@ const login = async (req, res, next) => {
     let {email, password} = req.body;
     email = email.trim() 
     password = password.trim();
+
     try {
         const user = await db.oneOrNone(
             `SELECT id, first_name, last_name, email, password FROM users WHERE email = $1`,
             [email]
         );
-
+        
         if (!user) {
             return res.status(401).json({message: "Invalid username or password"});
         }
@@ -62,10 +63,16 @@ const login = async (req, res, next) => {
         `, [email])
 
         delete user.password;
+        
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            maxAge: 24 * 60 * 60 * 1000 
+        });
 
         return res.status(200).json({
             message: 'Login successful',
-            token: token,
             user: user
         });
     } catch(error) {
@@ -104,7 +111,7 @@ const verifyEmail = async (req, res, next) => {
             await t.none("UPDATE users SET status = 'verified' WHERE id = $1", [dbToken.user_id]);
         });
         
-        return res.status(200).json({message: "Email has been verified"});
+        return res.status(200).send("<h1>Email has been verified. You can return to the application</h1>"});
     } catch (error) {
         next(error);
     }

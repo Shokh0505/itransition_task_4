@@ -17,23 +17,33 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { loginSubmit } from "@/service/auth.service";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [validationErros, setValidationErros] = useState({ email: '', password: '' })
+    const router = useRouter();
 
     const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true);
         const response = await loginSubmit({ e, setValidationErros });
         if (!response) return;
 
         const data = await response.json();
         if (!response.ok) {
             toast.error(data.message || "Something went wrong!")
+            setLoading(false);
             return;
         };
+
+        setLoading(false);
         toast.success(data.message || "Login successful!");
+        router.push('/');
     }
+
     return <>
         <div className="mt-8 space-y-6">
             <form className="flex flex-col gap-8" onSubmit={onSubmit}>
@@ -73,16 +83,18 @@ export function LoginForm() {
                     </div>
                 </div>
 
-                <Button className="w-full bg-sky-600 hover:bg-sky-700 text-white transition-colors" size="lg">
+                <Button className="w-full bg-sky-600 hover:bg-sky-700 text-white transition-colors" size="lg"
+                    disabled={loading}
+                >
                     Sign in
                 </Button>
             </form>
 
             <p className="text-center text-sm text-muted-foreground">
                 Don't have an account?{" "}
-                <a href="#" className="font-semibold leading-6 text-sky-600 hover:text-sky-500 transition-colors">
+                <Link href={'/register'} className="font-semibold leading-6 text-sky-600 hover:text-sky-500 transition-colors">
                     Register
-                </a>
+                </Link>
             </p>
         </div>
     </>

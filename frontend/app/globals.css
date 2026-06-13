@@ -124,4 +124,11 @@
     html {
         @apply font-sans;
     }
+
+    .navbar {
+        @apply fixed sm:static top-0 left-0 h-full sm:h-auto w-64 sm:w-auto
+                    bg-white sm:bg-transparent z-50 p-6 sm:p-0
+                    transform transition-transform duration-300 ease-in-out flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-2 lg:gap-4
+                    shadow-xl sm:shadow-none;
+    }
 }

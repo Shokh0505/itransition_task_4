@@ -2,14 +2,13 @@ const jwt = require('jsonwebtoken');
 const db = require('../db');
 
 const checkAuthentication = async (req, res, next) => {
-    const jwtTokenHeader = req.cookies.token("Authorization");
-    if (!jwtTokenHeader || !jwtTokenHeader.includes("Bearer")) {
+    const token = req.cookies.token; 
+    if (!token) {
         return res.status(401).json({message: "Authorization is not present. Please, log in."});
     } 
 
     try {
-        const jwtToken = jwtTokenHeader.split(" ")[1];
-        const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
 
         const user_status = await db.oneOrNone(`

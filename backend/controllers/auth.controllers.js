@@ -111,7 +111,7 @@ const verifyEmail = async (req, res, next) => {
             await t.none("UPDATE users SET status = 'verified' WHERE id = $1", [dbToken.user_id]);
         });
         
-        return res.status(200).send("<h1>Email has been verified. You can return to the application</h1>"});
+        return res.status(200).send("<h1>Email has been verified. You can return to the application</h1>");
     } catch (error) {
         next(error);
     }

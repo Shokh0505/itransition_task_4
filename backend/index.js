@@ -25,10 +25,6 @@ app.use('/api', userRouter);
 app.use('/api', deleteUsersRouter);
 app.use(errorHandler);
 
-const listRoutes = require('express-list-routes');
-
-listRoutes(app);
-
 app.listen(PORT, () => {
     console.log("The app is running...")
 })

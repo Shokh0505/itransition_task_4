@@ -13,18 +13,33 @@ import {
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { loginSubmit } from "@/service/auth.service";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
+const messages = {
+    session_expired: "Session expired, please login again.",
+    blocked: "You are blocked, please contact admin.",
+    unknown: "Something went wrong, please try again later.",
+}
+
 export function LoginForm() {
+    const searchParams = useSearchParams();
+
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [validationErros, setValidationErros] = useState({ email: '', password: '' })
     const router = useRouter();
+
+    useEffect(() => {
+        const error = searchParams.get('error');
+        if (error) {
+            toast.error(messages[error as keyof typeof messages] || "Something went wrong!");
+        }
+    }, [searchParams])
 
     const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();

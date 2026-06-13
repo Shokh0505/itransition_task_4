@@ -1,4 +1,3 @@
-require('dotenv').config() 
 const nodemailer = require('nodemailer');
 
 const sendVerificationEmail = async (email, token) => {
@@ -13,6 +12,7 @@ const sendVerificationEmail = async (email, token) => {
     });
 
     const verificationUrl = process.env.BASE_URL + "/api/auth/verify-email?token=" + token;
+    console.log(verificationUrl, " url for verifying the email");
 
     const mailInfo = {
         from: "Itransition task4 Shokhjahon Alijovon",

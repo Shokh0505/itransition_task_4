@@ -29,7 +29,19 @@ export default function Navbar() {
         }
     })
 
-
+    const { mutate: logoutMutate, isPending: logoutPending } = useMutation({
+        mutationFn: async () => {
+            const res = await axiosInstance.get('/auth/logout')
+            return res.data
+        },
+        onSuccess: (data) => {
+            toast.success(data.message || "Logout success!")
+            router.push('/login');
+        },
+        onError: (error) => {
+            toast.error(error.message || "Failed to logout")
+        }
+    })
 
     return (
         <TooltipProvider>
@@ -86,7 +98,10 @@ export default function Navbar() {
                     </Tooltip>
                 </div>
                 <div>
-                    <button className="bg-sky-600 hover:bg-sky-700 text-white transition-colors h-10 px-4 py-2 rounded-sm">
+                    <button className="bg-sky-600 hover:bg-sky-700 text-white transition-colors h-10 px-4 py-2 rounded-sm"
+                        onClick={() => logoutMutate()}
+                        disabled={logoutPending}
+                    >
                         Log out
                     </button>
                 </div>

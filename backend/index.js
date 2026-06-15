@@ -7,7 +7,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 8000;
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://itransitiontask4-production.up.railway.app'],
     credentials: true
 }
 

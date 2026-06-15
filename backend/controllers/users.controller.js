@@ -5,7 +5,7 @@ const getUsers = async (req, res, next) => {
         const users = await db.any(
             `SELECT first_name, last_name, title, email, status, last_login 
              FROM users
-             ORDER BY last_login DESC`
+             ORDER BY last_login DESC NULLS LAST`
         );
 
         res.status(200).json({message: "Successfully retrieved users", users: users});

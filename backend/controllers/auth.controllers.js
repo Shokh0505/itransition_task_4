@@ -115,13 +115,19 @@ const verifyEmail = async (req, res, next) => {
             
             return res.status(400).json({message: "The token was expired. New token has been send to your email"});
         }
+        
+        const user_status = await db.one('SELECT status FROM users WHERE id = $1', [dbToken.user_id]); 
+        if (user_status.status === 'blocked') {
+            return res.status(403).send('<p>You have been blocked.</p>')
+        }
+
 
         await db.tx(async t => {
             await t.none('DELETE FROM email_verifications WHERE token = $1', [token]);
             await t.none("UPDATE users SET status = 'verified' WHERE id = $1", [dbToken.user_id]);
         });
         
-        return res.status(200).send("<h1>Email has been verified. You can return to the application</h1>");
+        return res.status(200).send("<p>Email has been verified. You can return to the application</p>");
     } catch (error) {
         next(error);
     }

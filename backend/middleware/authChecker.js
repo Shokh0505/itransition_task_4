@@ -16,7 +16,7 @@ const checkAuthentication = async (req, res, next) => {
         `, [req.user.email]);
 
         if (!user_status) {
-            return res.json(401).json({message: "User not found"})
+            return res.status(401).json({message: "User not found"})
         }
         if (user_status.status === 'blocked') {
             return res.status(403).json({message: "You don't have access permission because you have been blocked"})

@@ -23,7 +23,7 @@ export interface User {
 
 export function UsersTable({ users }: { users: User[] }) {
     const { selectedUsers, toggleUser, setAll, setNone } = useSelectedUsers();
-    const allUsersSelected = users.length > 0 && selectedUsers.length === users.length;
+    const allUsersSelected = users?.length > 0 && selectedUsers.length === users.length;
 
     const handleGeneralCheckedChange = (checked: boolean | "indeterminate") => {
         if (checked === true) {
@@ -47,7 +47,7 @@ export function UsersTable({ users }: { users: User[] }) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {users.length === 0 && (
+                {(!users || users?.length === 0) && (
                     <TableRow>
                         <TableCell colSpan={5} className="text-center">No users found</TableCell>
                     </TableRow>

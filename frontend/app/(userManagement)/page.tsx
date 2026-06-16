@@ -24,7 +24,7 @@ export default async function Home() {
 
   return (
     <Providers>
-      <div className="">
+      <div>
         <Navbar />
         <div className="px-12">
           <UsersTable users={data.users} />

@@ -21,7 +21,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 const messages = {
-    session_expired: "Session expired, please login again.",
+    must_login: "You must login to continue.",
     blocked: "You are blocked, please contact admin.",
     unknown: "Something went wrong, please try again later.",
 }

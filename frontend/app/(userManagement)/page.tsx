@@ -16,7 +16,7 @@ export default async function Home() {
     next: { tags: ['users'] }
   });
 
-  if (res.status === 401) redirect("/login?error=session_expired");
+  if (res.status === 401) redirect("/login?error=must_login");
   if (res.status === 403) redirect("/login?error=blocked");
   if (!res.ok) redirect('/login?error=unknown');
 

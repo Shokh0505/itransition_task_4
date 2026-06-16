@@ -56,7 +56,7 @@ export function LoginForm() {
 
         setLoading(false);
         toast.success(data.message || "Login successful!");
-
+        router.push('/')
     }
 
     return <>

@@ -27,6 +27,7 @@ export default function Navbar() {
             toast.success(data.message || "Operation executed successfully")
         },
         onError: (error) => {
+            console.error(error);
             toast.error(error.message || "Failed to execute")
         }
     })

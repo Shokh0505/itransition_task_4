@@ -22,7 +22,7 @@ axiosInstance.interceptors.response.use(
             (error.response?.status === 401 || error.response?.status === 403)
         ) {
             window.dispatchEvent(new CustomEvent("unauthorized"));
-            window.location.href = "/login";
+            // window.location.href = "/login";
         }
         return Promise.reject(error);
     },

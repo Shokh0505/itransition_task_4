@@ -37,8 +37,7 @@ export const loginSubmit = async ({
         return;
     }
 
-    const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const response = await fetch(`${backendURL}/auth/login`, {
+    const response = await fetch(`/api/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -109,7 +108,7 @@ export const registerSubmit = async ({
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ email, password, first_name, last_name }),
-        }
+        },
     );
     return result;
 };

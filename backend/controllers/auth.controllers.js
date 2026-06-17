@@ -38,7 +38,7 @@ const login = async (req, res, next) => {
 
     try {
         const user = await db.oneOrNone(
-            `SELECT id, first_name, last_name, email, password FROM users WHERE email = $1`,
+            `SELECT id, first_name, last_name, email, password, status FROM users WHERE email = $1`,
             [email]
         );
         
@@ -49,6 +49,10 @@ const login = async (req, res, next) => {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) {
             return res.status(401).json({message: "Invalid username or password"});
+        }
+
+        if (user.status === 'blocked') {
+            return res.status(403).json({message: "You have been blocked. Please contact admin"});
         }
         
         const payload = {id: user.id, email: user.email};

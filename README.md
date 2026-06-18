@@ -74,7 +74,7 @@ itransition-task4/
    npm install
    ```
 
-3. Create a `.env.local` file:
+3. Create a `.env` file:
    ```env
    NEXT_PUBLIC_BACKEND_URL=https://your-backend-url.com/api
    ```

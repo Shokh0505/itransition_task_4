@@ -2,8 +2,6 @@ const jwt = require('jsonwebtoken');
 const db = require('../db');
 
 const checkAuthentication = async (req, res, next) => {
-    console.log("Cookies: ", req.cookies);
-    console.log("Headers: ", req.headers);
     const token = req.cookies.token; 
     if (!token) {
         return res.status(401).json({message: "Authorization is not present. Please, log in."});
@@ -30,6 +28,12 @@ const checkAuthentication = async (req, res, next) => {
                 message: "Invalid token. Please, log in again"
             })
         }
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                message: "Token expired please log in again"
+            })
+        }
+
         next(error)
     }
 }
